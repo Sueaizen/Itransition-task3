@@ -13,8 +13,8 @@ import java.util.Scanner;
 
 public class rbj {
     public static void main(String[] args) {
-        if (checkArgs(args)) {
-            System.out.println("Переданы не корректные аргументы");
+        if (argsCheck(args)) {
+            System.out.println("Bad arguments");
             return;
         }
         String key = toHex(generateStrongAESKey(256).getEncoded());
@@ -32,7 +32,7 @@ public class rbj {
         System.out.println("HMAC key: " + key);
     }
 
-    public static boolean checkArgs(String[] args) {
+    public static boolean argsCheck(String[] args) {
         if (args.length >= 3 && new HashSet<>(Arrays.asList(args)).size() == args.length && args.length % 2 == 1) {
             return false;
         } else {
@@ -137,7 +137,6 @@ public class rbj {
             }
         }
         return 1;
-
     }
 
     public static void result(String[] args, int comp, int you) {
