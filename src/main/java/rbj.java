@@ -19,16 +19,16 @@ public class rbj {
         }
         String key = toHex(generateStrongAESKey(256).getEncoded());
 
-        int compChoice = new Random().nextInt(args.length);
-        String HMAC = hmacDigest(compChoice + "", key, "HmacSHA256");
+        int computerChoice = new Random().nextInt(args.length);
+        String HMAC = hmacDigest(computerChoice + "", key, "HmacSHA256");
 
         int yourChoice = checker(args, HMAC);
         if (yourChoice == 0) {
             return;
         }
         System.out.println("Your move: " + args[yourChoice - 1]);
-        System.out.println("Computer move: " + args[compChoice]);
-        result(args, compChoice, yourChoice);
+        System.out.println("Computer move: " + args[computerChoice]);
+        result(args, computerChoice, yourChoice);
         System.out.println("HMAC key: " + key);
     }
 
@@ -41,10 +41,10 @@ public class rbj {
 
     }
 
-    public static SecretKey generateStrongAESKey(final int keysize) {
-        final KeyGenerator kgen;
+    public static SecretKey generateStrongAESKey(final int keySize) {
+        final KeyGenerator keyGenerator;
         try {
-            kgen = KeyGenerator.getInstance("AES");
+            keyGenerator = KeyGenerator.getInstance("AES");
         } catch (final NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
@@ -55,9 +55,9 @@ public class rbj {
             throw new RuntimeException(e);
         }
 
-        kgen.init(keysize, rng);
+        keyGenerator.init(keySize, rng);
 
-        return kgen.generateKey();
+        return keyGenerator.generateKey();
     }
 
     private static String toHex(final byte[] data) {
@@ -69,14 +69,14 @@ public class rbj {
 
     }
 
-    public static String hmacDigest(String compChoice, String keyString, String HMAC3) {
+    public static String hmacDigest(String computerChoice, String keyString, String HMAC3) {
         String digest = null;
         try {
             SecretKeySpec key = new SecretKeySpec((keyString).getBytes("UTF-8"), HMAC3);
             Mac mac = Mac.getInstance(HMAC3);
             mac.init(key);
 
-            byte[] bytes = mac.doFinal(compChoice.getBytes("ASCII"));
+            byte[] bytes = mac.doFinal(computerChoice.getBytes("ASCII"));
 
             StringBuffer hash = new StringBuffer();
             for (int i = 0; i < bytes.length; i++) {
@@ -139,8 +139,8 @@ public class rbj {
         return 1;
     }
 
-    public static void result(String[] args, int comp, int you) {
-        switch (game(args, comp, you - 1)) {
+    public static void result(String[] args, int computerChoice, int yourChoice) {
+        switch (game(args, computerChoice, yourChoice - 1)) {
             case (1):
                 System.out.println("You win");
                 break;
